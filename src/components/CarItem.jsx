@@ -8,7 +8,7 @@ import { motion } from "framer-motion"
 
 const CarItem = ({ car }) => {
   const [isHovered, setIsHovered] = useState(false)
-
+  
   return (
     <motion.div 
       className="border rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 bg-white"

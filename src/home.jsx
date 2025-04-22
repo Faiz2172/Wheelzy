@@ -5,6 +5,7 @@ import Category from './components/Category'
 import MostSearchedCar from './components/MostSearchedCar'
 import InfoSection from './components/InfoSection'
 import Footer from './components/Footer'
+import { Separator } from './components/ui/separator'
 
 const Home = () => {
   return (
@@ -19,6 +20,7 @@ const Home = () => {
       <MostSearchedCar/>
       {/* Info-Section */}
 <InfoSection/>
+<Separator  />
 {/* Footer-Section */}
 <Footer/>
       

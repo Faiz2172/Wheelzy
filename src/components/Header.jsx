@@ -1,9 +1,13 @@
 import { UserButton, useUser } from '@clerk/clerk-react'
 import React from 'react'
 import { Button } from './ui/button';
+import { Link } from 'react-router-dom';
 
 function Header() {
-  const {user,isSignedIn}=useUser();
+  // const {user,isSignedIn}=useUser();
+  const { user, isSignedIn } = useUser();
+console.log("USER:", user, "SIGNED IN:", isSignedIn);
+
 
   return (
     <div className='flex justify-between items-center shadow-md p-5 bg-white sticky top-0 z-50'>
