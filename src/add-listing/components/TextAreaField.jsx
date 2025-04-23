@@ -1,12 +1,12 @@
-import React from 'react'
-import { Textarea } from "@/components/ui/textarea"
+import React from 'react';
+import { Textarea } from "@/components/ui/textarea";
 
-const TextAreaField = () => {
+const TextAreaField = ({ item, handleInputChange }) => {
   return (
     <div>
-      <Textarea />
+      <Textarea/>
     </div>
-  )
-}
+  );
+};
 
-export default TextAreaField
+export default TextAreaField;
