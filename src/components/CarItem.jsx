@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom' 
+import { IoSpeedometerOutline } from "react-icons/io5";
+import { GiGearStickPattern } from "react-icons/gi";
+import { IoIosColorPalette } from "react-icons/io";
 
 const CarItem = ({ car }) => {
   // Extract properties from car object
   const carMake = car?.make || 'Unknown'
   const carModel = car?.model || 'Model'
   const carYear = car?.year || 'N/A'
-  const carPrice = car?.price || 'Contact for price'
+  const carSellingPrice =car?.sellingPrice || 'N/A'
+  const carTransmission = car?.transmission || 'N/A'
+  const carColor = car?.color || 'N/A'
   const carImage = car?.imageUrls?.[0] || null
-  const carLocation = car?.location || 'Unknown location'
   const carMileage = car?.mileage || 'N/A'
   const [imageError, setImageError] = useState(false)// State to track if image failed to load
 
@@ -37,11 +41,14 @@ const CarItem = ({ car }) => {
       
       <div className="p-4">
         <h3 className="font-bold text-lg mb-1">{carMake} {carModel}</h3>
-        <p className="text-gray-700 font-medium text-lg mb-2">${typeof carPrice === 'number' ? carPrice.toLocaleString() : carPrice}</p>
+        <p className="text-gray-700 font-medium text-lg mb-2">${carSellingPrice}</p>
         
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>{carMileage} {typeof carMileage === 'number' ? 'mi' : ''}</span>
-          <span>{carLocation}</span>
+        <div className="flex justify-between text-md text-gray-600">
+          <span><IoSpeedometerOutline />{carMileage}km/hr {typeof carMileage === 'number' ? 'mi' : ''}</span>
+          <span><GiGearStickPattern  />{carTransmission} </span>
+          <span><IoIosColorPalette  />{carColor} </span>
+
+
         </div>
         
         <Link 

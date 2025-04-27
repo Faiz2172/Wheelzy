@@ -17,7 +17,9 @@ function Header() {
       />
       
       <ul className='hidden md:flex gap-16'>
+        <Link to={'/'}>
         <li className='font-[25px] cursor-pointer hover:text-primary hover:underline hover:underline-offset-4 hover:font-medium'>Home</li>
+        </Link>
         <li className='font-[25px] cursor-pointer hover:text-primary hover:underline hover:underline-offset-4 hover:font-medium'>Search</li>
         <li className='font-[25px] cursor-pointer hover:text-primary hover:underline hover:underline-offset-4 hover:font-medium'>New</li>
         <li className='font-[25px] cursor-pointer hover:text-primary hover:underline hover:underline-offset-4 hover:font-medium'>PreOwned</li>
