@@ -19,10 +19,10 @@ const Home = () => {
       {/* Most Searched Car */}
       <MostSearchedCar/>
       {/* Info-Section */}
-<InfoSection/>
-<Separator  />
-{/* Footer-Section */}
-<Footer/>
+      <InfoSection/>
+      <Separator  />
+      {/* Footer-Section */}
+      <Footer/>
       
     </div>
   )

@@ -1,5 +1,5 @@
 import Header from '@/components/Header';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import carDetails from './../Shared/carDetails.json';
 import InputField from './components/InputField';
 import DropDownField from './components/DropDownField';
@@ -11,9 +11,13 @@ import { Button } from '@/components/ui/button';
 import CarImagesUpload from './components/CarImagesUpload';
 import { firebaseService } from '../services/firebaseService.js';
 import { storageService } from '../services/storageServices.js';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 function AddListing() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    email: '', // Add email to formData
+  });
   const [carImages, setCarImages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
@@ -30,6 +34,11 @@ function AddListing() {
   };
 
   const validateForm = () => {
+    // Add email validation
+    if (!formData.email || !formData.email.includes('@')) {
+      return 'Please enter a valid email address';
+    }
+
     const requiredFields = carDetails.carDetails.filter((item) => item.required).map((item) => item.name);
     for (const field of requiredFields) {
       if (!formData[field]) {
@@ -51,8 +60,15 @@ function AddListing() {
         throw new Error(validationError);
       }
 
+      // Prepare the listing data with email
+      const listingData = {
+        ...formData,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
       // Save the listing to get the ID
-      const carListing = await firebaseService.addCarListing(formData);
+      const carListing = await firebaseService.addCarListing(listingData);
 
       // Upload images to Cloudinary and get URLs
       let imageUrls = [];
@@ -74,7 +90,7 @@ function AddListing() {
       }
 
       setSubmitMessage('Car listing saved successfully!');
-      setFormData({}); // Reset form
+      setFormData({ email: '' }); // Reset form but keep email field initialized
       setCarImages([]); // Reset images
     } catch (error) {
       setSubmitMessage(`Error: ${error.message}`);
@@ -90,6 +106,27 @@ function AddListing() {
       <div className='px-10 md:px-20 my-10'>
         <h2 className='text-4xl font-bold'>Add New Listing</h2>
         <form className='p-10 border-2 rounded-xl mt-10' onSubmit={onSubmit}>
+          {/* User Email */}
+          <div className="mb-6">
+            <h2 className='font-medium text-xl mb-6'>Contact Information</h2>
+            <div className="max-w-md">
+              <Label htmlFor="email" className="text-sm">
+                Email Address <span className='text-red-700'>*</span>
+              </Label>
+              <Input 
+                id="email"
+                type="email" 
+                value={formData.email || ''}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                placeholder="Enter your email address"
+                className="mt-1"
+                required
+              />
+            </div>
+          </div>
+
+          <Separator className='my-6' />
+
           {/* Car details */}
           <div>
             <h2 className='font-medium text-xl mb-6'>Car details</h2>
