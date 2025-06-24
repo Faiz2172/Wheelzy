@@ -1,11 +1,11 @@
 import Header from '@/components/Header';
 import React, { useState, useEffect } from 'react';
-import carDetails from './../Shared/carDetails.json';
+import carDetails from '../Shared/carDetails.json';
 import InputField from './components/InputField';
 import DropDownField from './components/DropDownField';
 import TextAreaField from './components/TextAreaField';
 import { Separator } from '@/components/ui/separator';
-import features from './../Shared/features.json';
+import features from '../Shared/features.json';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import CarImagesUpload from './components/CarImagesUpload';
