@@ -15,7 +15,11 @@ if (ENV.NODE_ENV === "production") job.start();
 
 // Middleware
 app.use(cors({
-  origin: ENV.CORS_ORIGIN || 'http://localhost:5173',
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://wheelzy.onrender.com'
+  ],
   credentials: true
 }));
 app.use(express.json());
