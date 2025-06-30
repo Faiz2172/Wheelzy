@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, integer, varchar, boolean } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, integer, varchar, boolean ,foreignKey} from "drizzle-orm/pg-core";
 
 export const blogs = pgTable('blogs', {
   id: serial('id').primaryKey(),
@@ -29,3 +29,45 @@ export const reviews = pgTable('reviews', {
   updatedAt: timestamp('updated_at').defaultNow(),
   helpfulCount: integer('helpful_count').default(0),
 });
+
+export const carListings = pgTable('car_listings', {
+  id: serial('id').primaryKey(),
+
+  listingTitle: varchar('listing_title', { length: 255 }).notNull(),
+  tagline: varchar('tagline', { length: 255 }),
+  originalPrice: integer('original_price'),
+  sellingPrice: integer('selling_price').notNull(),
+
+  category: varchar('category', { length: 50 }).notNull(),
+  condition: varchar('condition', { length: 50 }).notNull(),
+  offerType: varchar('offer_type', { length: 50 }),
+
+  make: varchar('make', { length: 100 }).notNull(),
+  model: varchar('model', { length: 100 }).notNull(),
+  year: integer('year').notNull(),
+  driveType: varchar('drive_type', { length: 20 }).notNull(),
+  transmission: varchar('transmission', { length: 20 }).notNull(),
+  fuelType: varchar('fuel_type', { length: 20 }).notNull(),
+  mileage: integer('mileage').notNull(),
+  engineSize: varchar('engine_size', { length: 50 }),
+  cylinder: integer('cylinder'),
+  color: varchar('color', { length: 30 }).notNull(),
+  door: integer('door').notNull(),
+  vin: varchar('vin', { length: 100 }),
+
+  listingDescription: text('listing_description').notNull(),
+
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const carImages = pgTable('car_images', {
+  id: serial('id').primaryKey(),
+
+  carId: integer('car_id')
+    .notNull()
+    .references(() => carListings.id, { onDelete: 'cascade' }),
+
+  imageUrl: text('image_url').notNull(),
+});
+
