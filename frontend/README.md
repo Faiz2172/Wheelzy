@@ -24,9 +24,8 @@ A modern, interactive car marketplace platform built with React, Tailwind CSS, a
 ## 🛠️ Tech Stack
 
 - **Frontend**: React, Tailwind CSS, Framer Motion
-- **State Management**: React Context API / Redux
-- **Authentication**: Firebase Auth / JWT
-- **Data Storage**: Firebase / MongoDB
+- **Authentication**: Firebase Auth / JWT /Firebase /Clerk
+- **Data Storage**: Firebase / Mysql / Drizzle-ORM
 - **Deployment**: Vercel / Netlify
 
 ## 📋 Prerequisites
@@ -41,7 +40,7 @@ A modern, interactive car marketplace platform built with React, Tailwind CSS, a
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/automarket.git
+   git clone https://github.com/Faiz2172/Wheelzy
    cd automarket
    ```
 
@@ -73,9 +72,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact
 
 - Website: [yourdomain.com](https://yourdomain.com)
-- Email: hello@yourdomain.com
-- Twitter: [@yourusername](https://twitter.com/yourusername)
-- LinkedIn: [Your Name](https://linkedin.com/in/yourname)
-
+- Email: shkfaiz2004@gmail.com
+- LinkedIn: [Faiz Shaikh](https://www.linkedin.com/in/faiz-shaikh-1a9a85258)
+- Leetcode : [Faiz](https://leetcode.com/u/faizshk2004/)
 ---
 Built with ♥ by Faiz Shaikh
