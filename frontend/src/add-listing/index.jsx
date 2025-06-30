@@ -13,6 +13,7 @@ import { firebaseService } from '../services/firebaseService.js';
 import { storageService } from '../services/storageServices.js';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { carListingApi, carImageApi } from '../services/api.js';
 
 function AddListing() {
   const [formData, setFormData] = useState({
@@ -67,26 +68,16 @@ function AddListing() {
         updatedAt: new Date(),
       };
 
-      // Save the listing to get the ID
-      const carListing = await firebaseService.addCarListing(listingData);
+      // Save the listing to Neon database
+      const response = await carListingApi.createCarListing(listingData);
+      const carListing = response.data.data;
 
-      // Upload images to Cloudinary and get URLs
-      let imageUrls = [];
+      // Upload image URLs to backend if any
       if (carImages.length > 0) {
-        for (const imageFile of carImages) {
-          const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-          if (!validImageTypes.includes(imageFile.type)) {
-            throw new Error('Invalid image type. Only JPEG, PNG, and GIF are allowed.');
-          }
-          const imageUrl = await storageService.uploadCarImage(imageFile, carListing.id);
-          imageUrls.push(imageUrl);
-        }
-
-        // Update the listing with image URLs
-        await firebaseService.updateCarListing(carListing.id, {
-          imageUrls,
-          updatedAt: new Date(),
-        });
+        // For now, only support uploading image URLs (not files)
+        // If you want to support file uploads, backend changes are needed
+        const imageUrls = carImages.map(file => file.url || file);
+        await carImageApi.addCarImages(carListing.id, imageUrls);
       }
 
       setSubmitMessage('Car listing saved successfully!');
