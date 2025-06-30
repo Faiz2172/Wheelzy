@@ -5,6 +5,8 @@ import { ENV } from "./config/env.js";
 import {db} from "./config/database.js"
 import blogRoutes from "./routes/blogs.js";
 import reviewRoutes from "./routes/reviews.js";
+import carRoutes from "./routes/carListings.js";
+import carImages from "./routes/carImages.js";
 import job from "./config/cron.js";
 
 const app = express();
@@ -37,6 +39,8 @@ app.get("/api/health", (req, res) => {
 // API Routes
 app.use("/api/blogs", blogRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/carListings",carRoutes);
+app.use('/api/carImages', carImages);
 
 // Global error handler
 app.use((error, req, res, next) => {
