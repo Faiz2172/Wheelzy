@@ -1,34 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import CarItem from './CarItem'
-import { collection, getDocs } from 'firebase/firestore'
-import { db } from '../firebase.js'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
+import { carListingApi } from '../services/api.js'
+import Marquee from 'react-fast-marquee'
 
 const MostSearchedCar = () => {
   const [cars, setCars] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const VISIBLE_COUNT = 4
 
   useEffect(() => {
     const fetchCars = async () => {
       try {
         setLoading(true)
-        const carsCollection = collection(db, 'carListings')
-        const carsSnapshot = await getDocs(carsCollection)
-        const carsList = carsSnapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            ...data
-          };
-        })
-        setCars(carsList)
+        const response = await carListingApi.getAllCarListings()
+        setCars(response.data.data || [])
       } catch (err) {
         console.error("Error fetching cars:", err)
         setError("Failed to load cars. Please try again later.")
@@ -58,11 +44,11 @@ const MostSearchedCar = () => {
     )
   }
 
-  if (cars.length === 0) {
+  if (cars.length < VISIBLE_COUNT) {
     return (
       <div className='mx-24'>
         <h2 className='font-bold text-3xl text-center my-16'>Most Searched Cars</h2>
-        <div className="text-center py-8">No cars found</div>
+        <div className="text-center py-8">At least 4 cars are required to show the slider.</div>
       </div>
     )
   }
@@ -70,18 +56,13 @@ const MostSearchedCar = () => {
   return (
     <div className='mx-24'>
       <h2 className='font-bold text-3xl text-center my-16'>Most Searched Cars</h2>
-      <Carousel>
-        <CarouselContent >
+      <Marquee gradient={false} speed={50} pauseOnHover={true} style={{ gap: '2rem' }}>
         {cars.map((car) => (
-  <CarouselItem key={car.id} className="basis-1/4">
-    <CarItem car={car} />
-  </CarouselItem>
-))}
-
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+          <div key={car.id} style={{ width: '300px', marginRight: '32px' }}>
+            <CarItem car={car} />
+          </div>
+        ))}
+      </Marquee>
     </div>
   )
 }

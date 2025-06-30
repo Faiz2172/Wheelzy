@@ -139,7 +139,7 @@
       "label": "Fuel Type",
       "name": "fuelType",
       "fieldType": "dropdown",
-      "options": ["Petrol", "Diesel", "Electric", "Hybrid"],
+      "options": ["Petrol", "Diesel", "Electric", "Hybrid","Gasoline"],
       "required": true,
       "column": 1,
       "icon": "FaGasPump"

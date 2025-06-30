@@ -1,0 +1,1 @@
+ALTER TABLE "car_listings" ADD COLUMN "email" varchar(100) NOT NULL;

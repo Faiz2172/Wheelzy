@@ -1,6 +1,6 @@
 import { db } from '../config/database.js';
 import { carListings } from '../db/schema.js';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, and, lte } from 'drizzle-orm';
 
 // CREATE CAR LISTING
 export const createCarListing = async (req, res) => {
@@ -25,7 +25,8 @@ export const createCarListing = async (req, res) => {
       color,
       door,
       vin,
-      listingDescription
+      listingDescription,
+      email,
     } = req.body;
 
     const newListing = await db.insert(carListings).values({
@@ -48,7 +49,8 @@ export const createCarListing = async (req, res) => {
       color,
       door,
       vin,
-      listingDescription
+      listingDescription,
+      email
     }).returning();
 
     res.status(201).json({
@@ -68,11 +70,25 @@ export const createCarListing = async (req, res) => {
 // GET ALL CARS
 export const getAllCars = async (req, res) => {
   try {
-    const allCars = await db
-      .select()
-      .from(carListings)
-      .orderBy(desc(carListings.createdAt));
-
+    const { make, price, condition, category } = req.query;
+    let filters = [];
+    if (make) {
+      filters.push(eq(carListings.make, make));
+    }
+    if (price) {
+      filters.push(lte(carListings.sellingPrice, Number(price)));
+    }
+    if (condition) {
+      filters.push(eq(carListings.condition, condition));
+    }
+    if (category) {
+      filters.push(eq(carListings.category, category));
+    }
+    let query = db.select().from(carListings);
+    if (filters.length > 0) {
+      query = query.where(and(...filters));
+    }
+    const allCars = await query.orderBy(desc(carListings.createdAt));
     res.status(200).json({
       success: true,
       data: allCars,
@@ -177,6 +193,34 @@ export const updateCar = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error updating car',
+      error: error.message
+    });
+  }
+};
+
+// GET CAR LISTINGS BY EMAIL
+export const getCarListingsByEmail = async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email query parameter is required'
+      });
+    }
+    const listings = await db
+      .select()
+      .from(carListings)
+      .where(eq(carListings.email, email));
+    res.status(200).json({
+      success: true,
+      data: listings,
+      count: listings.length
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching car listings by email',
       error: error.message
     });
   }

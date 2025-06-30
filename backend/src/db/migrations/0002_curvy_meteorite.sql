@@ -1,0 +1,1 @@
+ALTER TABLE "car_listings" ALTER COLUMN "email" DROP NOT NULL;

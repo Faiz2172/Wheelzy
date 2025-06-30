@@ -36,6 +36,7 @@ export const carListings = pgTable('car_listings', {
   listingTitle: varchar('listing_title', { length: 255 }).notNull(),
   tagline: varchar('tagline', { length: 255 }),
   originalPrice: integer('original_price'),
+  email: varchar('email', { length: 100 }),
   sellingPrice: integer('selling_price').notNull(),
 
   category: varchar('category', { length: 50 }).notNull(),
@@ -70,4 +71,3 @@ export const carImages = pgTable('car_images', {
 
   imageUrl: text('image_url').notNull(),
 });
-

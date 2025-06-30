@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { collection, query, where, getDocs } from 'firebase/firestore'
-import { db } from '../firebase' // Adjust path based on your project structure
 import Header from '@/components/Header'
 import CarItem from '@/components/CarItem'
 import Search from '@/components/Search'
+import { carListingApi } from '../services/api.js';
 
 const SearchByOptions = () => {
     const [searchParams] = useSearchParams();
@@ -17,60 +16,18 @@ const SearchByOptions = () => {
 
     useEffect(() => {
         fetchFilteredCars();
+        // eslint-disable-next-line
     }, [cars, make, price]);
 
     const fetchFilteredCars = async () => {
         try {
             setLoading(true);
-            
-            // Create a reference to the cars collection
-            const carsRef = collection(db, 'carListings');
-            
-            // Start with a basic query
-            let baseQuery = query(carsRef);
-            
-            // Store conditions to apply
-            const conditions = [];
-            
-            // We'll need to do some filtering in JavaScript for multiple conditions
-            // since Firestore doesn't support OR operations across fields in a single query
-            
-            // Get all cars first if there are multiple filters
-            const querySnapshot = await getDocs(baseQuery);
-            
-            let filteredCars = [];
-            
-            // Convert snapshot to array
-            querySnapshot.forEach((doc) => {
-                filteredCars.push({ id: doc.id, ...doc.data() });
-            });
-            
-            // Apply JavaScript filtering based on the search parameters
-            if (cars) {
-                filteredCars = filteredCars.filter(car => 
-                    car.condition && car.condition.toLowerCase() === cars.toLowerCase()
-                );
-            }
-            
-            if (make) {
-                filteredCars = filteredCars.filter(car => 
-                    car.make && car.make.toLowerCase() === make.toLowerCase()
-                );
-            }
-            
-            if (price) {
-                // Remove any non-numeric characters and convert to number
-                const priceValue = Number(price.replace(/[^0-9.]/g, ''));
-                if (!isNaN(priceValue)) {
-                    filteredCars = filteredCars.filter(car => {
-                        // Since sellingPrice is stored as a string in your database
-                        const carPrice = Number(car.sellingPrice);
-                        return !isNaN(carPrice) && carPrice <= priceValue;
-                    });
-                }
-            }
-            
-            setCarList(filteredCars);
+            const params = {};
+            if (cars) params.condition = cars;
+            if (make) params.make = make;
+            if (price) params.price = price;
+            const response = await carListingApi.getAllCarListings(params);
+            setCarList(response.data.data || []);
             setLoading(false);
         } catch (error) {
             console.error("Error fetching cars:", error);

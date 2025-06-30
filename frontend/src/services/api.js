@@ -20,11 +20,13 @@ export const reviewApi = {
 };
 
 export const carListingApi = {
-  getAllCarListings: () => axios.get(`${API_BASE}/carListings`),
+  getAllCarListings: (params) => axios.get(`${API_BASE}/carListings`, { params }),
   createCarListing: (data) => axios.post(`${API_BASE}/carListings`, data),
   updateCarListing: (id, data) => axios.put(`${API_BASE}/carListings/${id}`, data),
   deleteCarListing: (id) => axios.delete(`${API_BASE}/carListings/${id}`),
-  getCarListingById: (id) => axios.get(`${API_BASE}/carListings/${id}`)
+  getCarListingById: (id) => axios.get(`${API_BASE}/carListings/${id}`),
+  getCarListingsByEmail: (email) => axios.get(`${API_BASE}/carListings/by-email`, { params: { email } }),
+  searchCarListings: (params) => axios.get(`${API_BASE}/carListings`, { params }),
 };
 
 export const carImageApi = {

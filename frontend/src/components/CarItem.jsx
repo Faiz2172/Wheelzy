@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom' 
 import { IoSpeedometerOutline } from "react-icons/io5";
 import { GiGearStickPattern } from "react-icons/gi";
 import { IoIosColorPalette } from "react-icons/io";
+import { carImageApi } from '../services/api.js';
 
 const CarItem = ({ car }) => {
   // Extract properties from car object
@@ -12,9 +13,24 @@ const CarItem = ({ car }) => {
   const carSellingPrice =car?.sellingPrice || 'N/A'
   const carTransmission = car?.transmission || 'N/A'
   const carColor = car?.color || 'N/A'
-  const carImage = car?.imageUrls?.[0] || null
   const carMileage = car?.mileage || 'N/A'
-  const [imageError, setImageError] = useState(false)// State to track if image failed to load
+  const [imageError, setImageError] = useState(false)
+  const [carImage, setCarImage] = useState(car?.imageUrls?.[0] || null)
+
+  useEffect(() => {
+    async function fetchImages() {
+      if ((!car?.imageUrls || car?.imageUrls.length === 0) && car?.id) {
+        try {
+          const response = await carImageApi.getCarImagesByCarId(car.id);
+          const urls = response.data.data.map(img => img.imageUrl);
+          setCarImage(urls[0] || null);
+        } catch (err) {
+          setCarImage(null);
+        }
+      }
+    }
+    fetchImages();
+  }, [car?.imageUrls, car?.id]);
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden h-full">
@@ -47,8 +63,6 @@ const CarItem = ({ car }) => {
           <span><IoSpeedometerOutline />{carMileage}km/hr {typeof carMileage === 'number' ? 'mi' : ''}</span>
           <span><GiGearStickPattern  />{carTransmission} </span>
           <span><IoIosColorPalette  />{carColor} </span>
-
-
         </div>
         
         <Link 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { firebaseService } from '../../services/firebaseService.js';
+import { carListingApi } from '../../services/api.js';
 import { useUser } from '@clerk/clerk-react';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -20,10 +20,9 @@ function MyListing() {
       try {
         setLoading(true);
         setError(null);
-        
-        // Fetch listings where email matches the current user's email
-        const userListings = await firebaseService.getCarListingsByEmail(user.primaryEmailAddress.emailAddress);
-        setListings(userListings);
+        // Fetch listings from backend by email
+        const response = await carListingApi.getCarListingsByEmail(user.primaryEmailAddress.emailAddress);
+        setListings(response.data.data);
       } catch (err) {
         console.error("Error fetching listings:", err);
         setError("Failed to load your listings. Please try again later.");
@@ -38,7 +37,7 @@ function MyListing() {
   const handleDeleteListing = async (listingId) => {
     if (window.confirm("Are you sure you want to delete this listing?")) {
       try {
-        await firebaseService.deleteCarListing(listingId);
+        await carListingApi.deleteCarListing(listingId);
         // Remove the deleted listing from state
         setListings(listings.filter(listing => listing.id !== listingId));
       } catch (err) {
@@ -92,8 +91,5 @@ function MyListing() {
     </div>
   );
 }
-
-
-
 
 export default MyListing;
