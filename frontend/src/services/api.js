@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5001/api';
+const API_BASE = "http://localhost:5001/api" || 'https://wheelzy.onrender.com'
+
 
 export const blogApi = {
   getAllBlogs: () => axios.get(`${API_BASE}/blogs`),
@@ -16,4 +17,18 @@ export const reviewApi = {
   updateReview: (id, data) => axios.put(`${API_BASE}/reviews/${id}`, data),
   deleteReview: (id) => axios.delete(`${API_BASE}/reviews/${id}`),
   getReviewById: (id) => axios.get(`${API_BASE}/reviews/${id}`)
+};
+
+export const carListingApi = {
+  getAllCarListings: () => axios.get(`${API_BASE}/carListings`),
+  createCarListing: (data) => axios.post(`${API_BASE}/carListings`, data),
+  updateCarListing: (id, data) => axios.put(`${API_BASE}/carListings/${id}`, data),
+  deleteCarListing: (id) => axios.delete(`${API_BASE}/carListings/${id}`),
+  getCarListingById: (id) => axios.get(`${API_BASE}/carListings/${id}`)
+};
+
+export const carImageApi = {
+  addCarImages: (carId, images) => axios.post(`${API_BASE}/carImages`, { carId, images }),
+  getCarImagesByCarId: (carId) => axios.get(`${API_BASE}/carImages/${carId}`),
+  deleteCarImage: (imageId) => axios.delete(`${API_BASE}/carImages/${imageId}`)
 };
