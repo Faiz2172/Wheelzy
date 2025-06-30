@@ -72,17 +72,11 @@ function AddListing() {
       const response = await carListingApi.createCarListing(listingData);
       const carListing = response.data.data;
 
-      // Upload images to Cloudinary and send URLs to backend
+      // Upload image URLs to backend if any
       if (carImages.length > 0) {
-        const imageUrls = [];
-        for (const imageFile of carImages) {
-          const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-          if (!validImageTypes.includes(imageFile.type)) {
-            throw new Error('Invalid image type. Only JPEG, PNG, and GIF are allowed.');
-          }
-          const imageUrl = await storageService.uploadCarImage(imageFile, carListing.id);
-          imageUrls.push(imageUrl);
-        }
+        // For now, only support uploading image URLs (not files)
+        // If you want to support file uploads, backend changes are needed
+        const imageUrls = carImages.map(file => file.url || file);
         await carImageApi.addCarImages(carListing.id, imageUrls);
       }
 
