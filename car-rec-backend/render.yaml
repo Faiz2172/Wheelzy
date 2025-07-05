@@ -1,9 +1,10 @@
 services:
   - type: web
-    name: ai-car-recommendation-backend
+    name: car-recommendation-api
     env: python
+    pythonVersion: "3.11"
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --config gunicorn.conf.py app:app
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120
     envVars:
       - key: HOST
         value: 0.0.0.0
@@ -12,20 +13,22 @@ services:
       - key: WORKERS
         value: 1
       - key: ALLOWED_ORIGINS
-        value: http://localhost:5173,http://localhost:3000 
+        value: http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173
       - key: EMBEDDING_MODEL
-        value: sentence-transformers/all-mpnet-base-v2
-      - key: TOP_K_RECOMMENDATIONS
-        value: 10
-      - key: SIMILARITY_THRESHOLD
-        value: 0.3
+        value: all-MiniLM-L6-v2
       - key: LOG_LEVEL
         value: INFO
-      - key: DEBUG
-        value: false
-      - key: CACHE_EMBEDDINGS
-        value: true
-      - key: CACHE_FILE
-        value: car_embeddings_cache.pkl
+      - key: CORS_ORIGINS
+        value: http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173
+      - key: PYTHONPATH
+        value: .
+      - key: PYTHONUNBUFFERED
+        value: 1
+      - key: GUNICORN_TIMEOUT
+        value: 120
+      - key: GUNICORN_WORKERS
+        value: 1
+      - key: GUNICORN_BIND
+        value: 0.0.0.0:8000
     healthCheckPath: /
     autoDeploy: true 
