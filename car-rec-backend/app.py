@@ -9,25 +9,23 @@ from typing import List, Dict, Optional
 import re
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics.pairwise import cosine_similarity
-import pickle
 import os
 from datetime import datetime
-import asyncio
-from functools import lru_cache
+from dotenv import load_dotenv
+import pickle
 
-app = FastAPI(title="Advanced Car Recommendation System", version="2.0")
+# Load environment variables
+load_dotenv()
 
-# Add CORS middleware to allow frontend requests
+app = FastAPI(title="AI Car Recommendation System", version="2.0")
+
+# Get CORS origins from environment variable
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:5173").split(",")
+
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",  # React dev server
-        "http://localhost:5173",  # Vite dev server
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:5173",
-        "https://your-frontend-domain.com",  # Replace with your production domain
-    ],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
@@ -35,18 +33,13 @@ app.add_middleware(
 
 # Configuration
 class Config:
-    # Use a more powerful multilingual model
-    EMBEDDING_MODEL = "sentence-transformers/all-mpnet-base-v2"  # Better than MiniLM
-    # Alternative high-performance models:
-    # "sentence-transformers/all-MiniLM-L12-v2"  # Larger MiniLM
-    # "sentence-transformers/paraphrase-multilingual-mpnet-base-v2"  # For multilingual
-    # "sentence-transformers/all-distilroberta-v1"  # RoBERTa-based
-    
-    TOP_K_RECOMMENDATIONS = 10
-    SIMILARITY_THRESHOLD = 0.3
-    CACHE_EMBEDDINGS = True
-    CACHE_FILE = "car_embeddings_cache.pkl"
-    LOG_FILE = "recommendation_advanced.log"
+    EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-mpnet-base-v2")
+    TOP_K_RECOMMENDATIONS = int(os.getenv("TOP_K_RECOMMENDATIONS", "10"))
+    SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.3"))
+    CACHE_EMBEDDINGS = os.getenv("CACHE_EMBEDDINGS", "true").lower() == "true"
+    CACHE_FILE = os.getenv("CACHE_FILE", "car_embeddings_cache.pkl")
+    LOG_FILE = os.getenv("LOG_FILE", "recommendation_advanced.log")
+    DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 
 config = Config()
 
@@ -54,13 +47,12 @@ config = Config()
 print(f"Loading model: {config.EMBEDDING_MODEL}")
 model = SentenceTransformer(config.EMBEDDING_MODEL)
 
-# Enhanced logging setup
+# Logging setup
+log_level = getattr(logging, os.getenv("LOG_LEVEL", "INFO").upper())
 logging.basicConfig(
-    level=logging.INFO,
+    level=log_level,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler()
-    ]
+    handlers=[logging.StreamHandler()]
 )
 logger = logging.getLogger(__name__)
 
@@ -886,8 +878,6 @@ async def get_stats():
         "body_types_available": sorted(recommender.df['Body_Type'].unique().tolist()),
         "fuel_types_available": sorted(recommender.df['Fuel_Type'].unique().tolist())
     }
-
-
 
 if __name__ == "__main__":
     import uvicorn
