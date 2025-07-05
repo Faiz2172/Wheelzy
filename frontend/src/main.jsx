@@ -12,6 +12,7 @@ import SearchByOptions from './search'
 import Blog from './pages/BlogReview'
 import BlogDetail from './pages/BlogDetail'
 import ReviewDetail from './pages/ReviewDetail'
+import AiCarRecommendation from '../../frontend/src/components/Ai-car_recommendation/index.jsx'
 
 const router=createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router=createBrowserRouter([
   {
     path:'/reviews/:id',
     element:<ReviewDetail/>
+  },
+  {
+    path:'/recommend',
+    element:<AiCarRecommendation/>
   },
 ])
 
