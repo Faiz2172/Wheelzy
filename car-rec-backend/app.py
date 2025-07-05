@@ -641,10 +641,14 @@ class CarRecommendationSystem:
         return filtered_indices
 
 # Initialize recommendation system
+recommender = None
 try:
+    print("Starting to initialize Car recommendation system...")
     recommender = CarRecommendationSystem()
+    print("Car recommendation system initialized successfully")
     logger.info("Car recommendation system initialized successfully")
 except Exception as e:
+    print(f"Failed to initialize recommendation system: {e}")
     logger.error(f"Failed to initialize recommendation system: {e}")
     recommender = None
 
@@ -682,13 +686,24 @@ async def root():
         "message": "Advanced Car Recommendation System",
         "version": "2.0",
         "model": config.EMBEDDING_MODEL,
-        "status": "healthy" if recommender else "error",
+        "status": "healthy" if recommender else "initialization_failed",
         "total_cars": len(recommender.df) if recommender else 0,
         "endpoints": {
             "recommend": "/recommend",
             "stats": "/stats",
             "evaluate": "/evaluate"
-        }
+        },
+        "note": "Some endpoints may not work if recommendation system failed to initialize"
+    }
+
+@app.get("/test")
+async def test():
+    """Simple test endpoint that doesn't require recommender system"""
+    return {
+        "message": "Server is running",
+        "timestamp": datetime.now().isoformat(),
+        "python_version": "3.10",
+        "status": "ok"
     }
 
 def filter_cars(query, df):
