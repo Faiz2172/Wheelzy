@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/api/health", (req, res) => {
   res.status(200).json({ 
     success: true, 
-    message: "CarDekho API is running",
+    message: "wheelzy API is running",
     timestamp: new Date().toISOString()
   });
 });
