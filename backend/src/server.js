@@ -20,7 +20,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'http://localhost:5174',
-    'https://wheelzy.onrender.com'
+    'https://wheelzy.onrender.com',
+    'https://wheelzy.vercel.app'
   ],
   credentials: true
 }));
@@ -54,10 +55,13 @@ app.use((error, req, res, next) => {
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ 
-    success: false,
-    message: "Route not found" 
-  });
+  res.status(404).json(
+    {
+      "success": true,
+      "message": "CarDekho API is running",
+      "timestamp": "..."
+    }
+);
 });
 
 app.listen(PORT, () => {

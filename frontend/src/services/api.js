@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = "http://localhost:5001/api" || 'https://wheelzy.onrender.com'
+const API_BASE = 'https://wheelzy.onrender.com/api' ;
 
 
 export const blogApi = {
