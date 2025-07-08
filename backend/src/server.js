@@ -58,7 +58,7 @@ app.use((req, res) => {
   res.status(404).json(
     {
       "success": true,
-      "message": "CarDekho API is running",
+      "message": "wheelzy API is running",
       "timestamp": "..."
     }
 );
