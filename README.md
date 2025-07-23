@@ -31,6 +31,8 @@ A modern, interactive car marketplace platform built with React, Tailwind CSS, F
 ## 🛠️ Tech Stack
 
 - **Frontend**: React, Tailwind CSS, Framer Motion
+- **Backend**: Nodejs, Expressjs
+- **AI Models**: Sentence Transformers , Hugging face models
 - **Authentication**: Firebase Auth / JWT /Firebase /Clerk
 - **Data Storage**: Firebase / Mysql / Drizzle-ORM
 - **Deployment**: Vercel / Netlify
